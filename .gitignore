@@ -1,0 +1,6 @@
+web/vendor/
+web/vendor/*.*
+web/vendor/composer.lock
+
+
+
