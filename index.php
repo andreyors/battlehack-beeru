@@ -12,6 +12,8 @@ require WEBROOT . 'conf/config.php';
 require WEBROOT . 'conf/config.twilio.php';
 require WEBROOT . 'conf/config.braintree.php';
 
+include WEBROOT . "libs/GoogleShortener.php";
+
 require WEBROOT . 'models/activetable.php';
 require WEBROOT . 'models/customer.php';
 require WEBROOT . 'models/payment.php';
@@ -170,9 +172,6 @@ $app->get('/api/short', 'API', function() use ($app) {
   $url = !empty($_GET['url']) ? $_GET['url'] : '';
 
   if (!empty($url)) {
-
-    include WEBROOT . "libs/GoogleShortener.php";
-
     $gApi = new GoogleShortener(GOOGLE_API_KEY);
     $short = $gApi->shorten($url);
 
