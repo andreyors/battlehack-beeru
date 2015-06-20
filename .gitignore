@@ -7,6 +7,7 @@ var/cache/
 var/cache/*.*
 conf/config.php
 conf/config.braintree.php
+conf/config.twilio.php
 .idea
 api/.idea
 api/node_modules
