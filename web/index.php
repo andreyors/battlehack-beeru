@@ -2,6 +2,7 @@
 
 require WEBROOT . 'vendor/autoload.php';
 require 'common.php';
+require 'conf/config.php';
 
 $app = new \Slim\Slim(array(
     'debug' => true,
@@ -26,16 +27,20 @@ $app->get('/api/payment', 'API', function() use ($app, $db) {
   
   $cnt = $res ? $res->fetchColumn() : 0;
   
-  $app->render(200, ['progress' => ceil($cnt * 100 / 30), 'cnt' => $cnt]);
+  $token = md5('hello');
+  
+  $app->render(200, ['token' => $token]);
 });
 
 
 $app->get('/api/payment/status', 'API', function() use ($app, $db) {
-  $sql = "SELECT NOW()";
-  $res = $db->query($sql);
-  
-  $cnt = $res ? $res->fetchColumn() : 0;
-  
-  $app->render(200, ['progress' => ceil($cnt * 100 / 30), 'cnt' => $cnt]);
+    $token = !empty($_POST['token']) ? subtsr($_POST['token'], 0, 32) : false;
+    
+    $status = 'rejected';
+    if (!empty($token)) {
+        $status = 'paid';
+    }
+    
+    $app->render(200, ['status' => $status]);
 });
 
