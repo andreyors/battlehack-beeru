@@ -7,8 +7,6 @@ var/cache/
 var/cache/*.*
 conf/config.php
 conf/config.braintree.php
-
-
-
-
-
+.idea
+api/.idea
+api/node_modules
