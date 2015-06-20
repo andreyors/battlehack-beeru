@@ -1,11 +1,11 @@
-web/vendor/
-web/vendor/*.*
-web/vendor/composer.lock
-web/var/
-web/var/*.*
-web/var/cache/
-web/var/cache/*.*
-web/conf/config.php
+vendor/
+vendor/*.*
+vendor/composer.lock
+var/
+var/*.*
+var/cache/
+var/cache/*.*
+conf/config.php
 
 
 

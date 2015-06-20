@@ -1,5 +1,0 @@
-<?php
-
-define('PDO_DSN', 'mysql:host=localhost;dbname=');
-define('PDO_USER', '');
-define('PDO_PASSWD', '');
