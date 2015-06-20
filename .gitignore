@@ -1,6 +1,9 @@
 web/vendor/
 web/vendor/*.*
 web/vendor/composer.lock
+web/var/
+web/var/cache/
+
 
 
 
