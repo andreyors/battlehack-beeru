@@ -3,6 +3,7 @@
         "slim/slim": "2.3.*",
         "dogancelik/slim-json": "0.2.*",
         "slim/views": "0.1.*",
-        "twig/twig": "1.*"
+        "twig/twig": "1.*",
+        "braintree/braintree_php" : "3.0.1"
     }
 }

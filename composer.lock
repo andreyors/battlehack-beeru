@@ -4,8 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e113b3668766219a67ffad7c92cb4b1d",
+    "hash": "7bac5096756ad059509379e97c03fa20",
     "packages": [
+        {
+            "name": "braintree/braintree_php",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/braintree/braintree_php.git",
+                "reference": "a62a3c652c2d129575c2fc1bc499212ec9ce9273"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/a62a3c652c2d129575c2fc1bc499212ec9ce9273",
+                "reference": "a62a3c652c2d129575c2fc1bc499212ec9ce9273",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-hash": "*",
+                "ext-openssl": "*",
+                "ext-simplexml": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Braintree": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Braintree",
+                    "homepage": "http://www.braintreepayments.com"
+                }
+            ],
+            "description": "Braintree PHP Client Library",
+            "time": "2015-06-03 22:44:09"
+        },
         {
             "name": "dogancelik/slim-json",
             "version": "v0.2.0",
