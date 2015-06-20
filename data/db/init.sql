@@ -4,6 +4,7 @@ USE battlehackberlin;
 
 CREATE TABLE customers (
     id INT(9) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    customer_id VARCHAR(255),
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     company VARCHAR(255),

@@ -1,0 +1,5 @@
+<?php
+
+define('TWILIO_SID', 'AC2060f87b533ffcbdf03013faf420ebc0');
+define('TWILIO_TOKEN', '4934bb52d90bf717d40af7797a9fcb51');
+define('TWILIO_NUMBER', '4915735984358');
