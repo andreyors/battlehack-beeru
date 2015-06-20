@@ -17,7 +17,7 @@ function API() {
     'json.override_error' => true,
     'json.override_notfound' => true
   ]));
-}
+} 
 
 function DB($db_dsn, $db_user, $db_pass) {
     try {
@@ -40,10 +40,7 @@ $app = new \Slim\Slim(array(
     'templates.path' => WEBROOT . 'views',
 ));
 
-die(var_dump($app));
-
 $db = DB(DB_DSN, DB_USER, DB_PASS);
-
 $view = $app->view;
 $view->parserOptions = array(
     'debug' => true,
@@ -51,14 +48,11 @@ $view->parserOptions = array(
 );
 
 $app->get('/', function() use ($app, $db) {
-  die('S');
   $sql = "SELECT NOW()";
   $res = $db->query($sql);
   
   $cnt = $res ? $res->fetchColumn() : 0;
-  
-  die(var_dump($cnt));
-  
+
   $app->render('index/index.twig');
 });
 
@@ -85,3 +79,4 @@ $app->get('/api/payment/status', 'API', function() use ($app, $db) {
     $app->render(200, ['status' => $status]);
 });
 
+$app->run();
