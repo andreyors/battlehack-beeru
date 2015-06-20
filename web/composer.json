@@ -1,5 +1,7 @@
 {
     "require": {
-        "slim/slim-skeleton": "^2.1"
-    }
+        "slim/slim-skeleton": "^2.1",
+        "dogancelik/slim-json": "0.2.*"
+    },
+    "include-path": ["lib/"]
 }

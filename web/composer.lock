@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c4d7d95a81f451c7d3ae678208e7c8c8",
+    "hash": "7de7fd15286a033875c091ed8d2d1512",
     "packages": [
+        {
+            "name": "dogancelik/slim-json",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dogancelik/slim-json.git",
+                "reference": "64c9cfd0a74fb78a6dccb44a5eb8bc905aa549ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dogancelik/slim-json/zipball/64c9cfd0a74fb78a6dccb44a5eb8bc905aa549ce",
+                "reference": "64c9cfd0a74fb78a6dccb44a5eb8bc905aa549ce",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SlimJson": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Doğan Çelik",
+                    "email": "iletisim@dogancelik.com",
+                    "homepage": "http://dogancelik.com/"
+                }
+            ],
+            "description": "JSON middleware for Slim PHP framework",
+            "homepage": "http://github.com/dogancelik/slim-json",
+            "keywords": [
+                "json",
+                "middleware",
+                "slim",
+                "view"
+            ],
+            "time": "2014-05-07 23:30:53"
+        },
         {
             "name": "monolog/monolog",
             "version": "1.14.0",
