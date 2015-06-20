@@ -119,7 +119,9 @@ $app->get('/api/payment/status', function() {
     die(json_encode($data));
 });
 
-$app->get('/api/')
+$app->get('/api/sms', 'API', function() {
+    // TODO
+});
 
 $app->get('/api/short', 'API', function() use ($app) {
   $url = !empty($_GET['url']) ? $_GET['url'] : '';
