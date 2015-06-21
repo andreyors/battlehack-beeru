@@ -88,7 +88,7 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
   $customerData = !empty($json['customer']) ? $json['customer'] : array();
   $itemsData = !empty($json['items']) ? $json['items'] : array();
 
-  $token = false;
+  $token = '';
   if (!empty($customerData)) {
     $customer = new Customer($db);
     $customer_id = $customer->getCustomerIdByValues($customerData);
@@ -191,8 +191,47 @@ $app->get('/api/url', 'API', function() use ($app) {
   $app->render(200, ['result' => $result]);
 });
 
-$api->post('/api/mail', 'API', function() use ($app, $db) {
-  MAIL()
+$app->get('/api/mail', 'API', function() use ($app, $db) {
+  QMAIL('mvv.feo@gmail.com', 'andrey.orsoev@gmail.com', 'Subj', 'Body');
+});
+
+$app->post('/api/token', 'API', function() use($app, $db) {
+  $rawData = file_get_contents("php://input");
+  $json = json_decode($rawData, true);
+
+  $customer = new Customer($db);
+
+  $data = array(
+      'first_name' => (!empty($json['first_name']) ? $json['first_name'] : ''),
+      'last_name' => (!empty($json['last_name']) ? $json['last_name'] : ''),
+      'email' => (!empty($json['email']) ? $json['email'] : ''),
+      'phone' => (!empty($json['phone']) ? $json['phone'] : ''),
+  );
+
+  $customer_id = $customer->getIdByValues($data);
+
+  if (empty($customer_id)) {
+    $customer_id = $customer->create($data);
+  }
+
+  $paypalCustomerId = $customer->getCustomerIdByValues($data);
+  if (empty($paypalCustomerId)) {
+    $data = array(
+      'firstName' => (!empty($json['first_name']) ? $json['first_name'] : ''),
+      'lastName' => (!empty($json['last_name']) ? $json['last_name'] : ''),
+      'email' => (!empty($json['email']) ? $json['email'] : ''),
+      'phone' => (!empty($json['phone']) ? $json['phone'] : ''),
+    );
+    $paypalCustomerId = $customer->createCustomer($data);
+    $customer->update($customer_id, array('customer_id' => $paypalCustomerId));
+  }
+
+  $token = false;
+  if ($paypalCustomerId) {
+    $token = $customer->getTokenByCustomerId($paypalCustomerId);
+  }
+
+  $app->render(200, ['token' => $token]);
 });
 
 $app->run();

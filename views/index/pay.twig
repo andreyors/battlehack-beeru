@@ -20,7 +20,12 @@
         clientToken,
         "dropin",
         {
-            container: "payment-form"
+            container: "payment-form",
+            paypal: {
+                singleUse: true,
+                amount: {{ amount }},
+                currency: 'EUR'
+            }
         }
     );
     </script>

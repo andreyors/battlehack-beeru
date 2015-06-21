@@ -4,6 +4,10 @@ class Customer extends ActiveTable {
     protected $_table = "customers";
     protected $_db = null;
 
+    public function getIdByValues($data) {
+        return $this->_read($data, 'id');
+    }
+
     public function getCustomerIdByValues($data) {
         return $this->_read($data, 'customer_id');
     }
