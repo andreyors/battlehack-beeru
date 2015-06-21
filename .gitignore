@@ -8,6 +8,7 @@ var/cache/*.*
 conf/config.php
 conf/config.braintree.php
 conf/config.twilio.php
+conf/config.sendgrid.php
 .idea
 api/.idea
 api/node_modules

@@ -191,4 +191,8 @@ $app->get('/api/url', 'API', function() use ($app) {
   $app->render(200, ['result' => $result]);
 });
 
+$api->post('/api/mail', 'API', function() use ($app, $db) {
+  MAIL()
+});
+
 $app->run();

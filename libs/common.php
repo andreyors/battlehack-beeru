@@ -46,6 +46,42 @@ function URL($url) {
   return $gApi->shorten($url);
 }
 
+function MAIL($from, $to, $subject, $text) {
+  $url = 'https://api.sendgrid.com/api/mail.send.json';
+
+  $params = array(
+    'api_user' => SENDGRID_USER,
+    'api_key' => SENDGRID_PASS,
+    'from' => $from,
+    'subject' => $subject,
+    'text' => $text,
+  );
+
+  $to = !is_array($to) ? array($to) : $to;
+
+  if (!empty($to)) {
+    foreach($to as $v) {
+      if (preg_match('#(.*)\s+\<(.*)\>+#', $v, $matches)) {
+        var_dump($matches);
+      }
+    }
+  }
+
+  $postdata = http_build_query($params);
+  $opts = array(
+    'http' =>array(
+      'method'  => 'POST',
+      'header'  => 'Content-type: application/x-www-form-urlencoded',
+      'content' => $postdata
+    )
+  );
+
+  $context  = stream_context_create($opts);
+  $result = file_get_contents($url, false, $context);
+
+  return $result;
+}
+
 function isValidPhone($phone) {
   $phoneUtil = libphonenumber\PhoneNumberUtil::getInstance();
   try {
