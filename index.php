@@ -248,6 +248,13 @@ $app->post('/api/token', 'API', function() use($app, $db) {
   $app->render(200, ['token' => $token]);
 });
 
+$app->options('/api/data', function() {
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+  header('Access-Control-Max-Age: 1000');
+  header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+});
+
 $app->post('/api/data', 'API', function() use($app, $db) {
   $rawData = file_get_contents("php://input");
   $json = json_decode($rawData, true);
