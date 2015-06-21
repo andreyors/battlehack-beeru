@@ -1,0 +1,10 @@
+<?php
+
+// https://developers.braintreepayments.com/javascript+php/start/hello-client
+define('CLIENT_TOKEN', '');
+
+// https://sandbox.braintreegateway.com/merchants/297g9q4mp46jpdgt/home
+Braintree_Configuration::environment('sandbox');
+Braintree_Configuration::merchantId('');
+Braintree_Configuration::publicKey('');
+Braintree_Configuration::privateKey('');
