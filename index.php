@@ -88,10 +88,10 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
   $customerData = !empty($json['customer']) ? $json['customer'] : array();
   $itemsData = !empty($json['items']) ? $json['items'] : array();
 
-  $token = '';
+  $token = null;
   if (!empty($customerData)) {
     $customer = new Customer($db);
-    $customer_id = $customer->getCustomerIdByValues($customerData);
+    $customer_id = $customer->getIdByValues($customerData);
 
     if (!$customer_id) {
       $customer_id = $customer->create($customerData);
@@ -226,7 +226,7 @@ $app->post('/api/token', 'API', function() use($app, $db) {
     $customer->update($customer_id, array('customer_id' => $paypalCustomerId));
   }
 
-  $token = false;
+  $token = null;
   if ($paypalCustomerId) {
     $token = $customer->getTokenByCustomerId($paypalCustomerId);
   }

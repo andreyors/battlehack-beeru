@@ -4,9 +4,6 @@ class Customer extends ActiveTable {
     protected $_table = "customers";
     protected $_db = null;
 
-    public function getIdByValues($data) {
-        return $this->_read($data, 'id');
-    }
 
     public function getCustomerIdByValues($data) {
         return $this->_read($data, 'customer_id');
@@ -26,7 +23,7 @@ class Customer extends ActiveTable {
 
     public function createCustomer($data) {
         $res = Braintree_Customer::create($data);
-        return $res->success ? $res->customer->id : false;
+        return $res->success && !empty($res->customer->id) ? $res->customer->id : false;
     }
 
     public function create($data) {
@@ -37,6 +34,7 @@ class Customer extends ActiveTable {
         $email = !empty($data['email']) ? $data['email'] : '';
         $phone = !empty($data['phone']) ? $data['phone'] : '';
 
+        $id = null;
         if (!empty($first_name) && !empty($last_name) && !empty($email) && !empty($phone)) {
             $sql = sprintf("INSERT INTO
                 %s
