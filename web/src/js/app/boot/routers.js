@@ -33,6 +33,15 @@
                     url: '/pay',
                     templateUrl: 'tpl/pay.html',
                     controller: 'PayController'
+                })
+                .state('pay.success', {
+                    url: '/success',
+                    templateUrl: 'tpl/pay-success.html'
+                })
+                .state('receive', {
+                    url: '/receive/:beerId',
+                    templateUrl: 'tpl/receive.html',
+                    controller: 'ReceiveController'
                 });
 
         };
