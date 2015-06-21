@@ -202,6 +202,13 @@ $app->get('/api/mail', 'API', function() use ($app, $db) {
   }
 });
 
+$app->options('/api/token', function() use ($app, $db) {
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+  header('Access-Control-Max-Age: 1000');
+  header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+});
+
 $app->post('/api/token', 'API', function() use($app, $db) {
   $rawData = file_get_contents("php://input");
   $json = json_decode($rawData, true);
@@ -239,6 +246,41 @@ $app->post('/api/token', 'API', function() use($app, $db) {
   }
 
   $app->render(200, ['token' => $token]);
+});
+
+$app->options('/api/data', function() {
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+  header('Access-Control-Max-Age: 1000');
+  header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+});
+
+$app->post('/api/data', 'API', function() use($app, $db) {
+  $rawData = file_get_contents("php://input");
+  $json = json_decode($rawData, true);
+
+  $email = !empty($json['email']) ? $json['email'] : '';
+  $phone = !empty($json['phone']) ? $json['phone'] : '';
+  $link = !empty($json['link']) ? $json['link'] : '';
+
+  $result = 'failed';
+  if (!empty($link)) {
+    $short = URL($link);
+
+    $text = "You've got a gift - Follow " . $short;
+
+    if (!empty($email)) {
+      QMAIL('delivery@beeru.com', $email, 'Bottle of Beer...', $text);
+    }
+
+    if (!empty($phone)) {
+      SMS($phone, $text);
+    }
+
+    $result = 'sent';
+  }
+
+  $app->render(200, ['result' => $result]);
 });
 
 $app->run();
