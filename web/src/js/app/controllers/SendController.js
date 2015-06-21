@@ -11,9 +11,9 @@
             });
 
             $scope.user = {
-                name: '',
-                email: '',
-                phone: '',
+                name: 'Test Name',
+                email: 'blublublu@mailinator.com',
+                phone: '+4915164597723',
                 address: ''
             };
 

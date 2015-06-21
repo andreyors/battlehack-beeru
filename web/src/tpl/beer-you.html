@@ -1,11 +1,11 @@
-<div layout="column" layout-align="center center" style="height: 100px;">
+<div layout="row" layout-align="center center" style="height: 100px;" class="listing">
 
-    <md-select ng-model="category" md-on-open="loadCategories()" ng-change="changeCategory()" style="min-width: 200px;">
+    <md-select ng-model="category" md-on-open="loadCategories()" ng-change="changeCategory()">
         <md-select-label>{{ category ? category.cat_name : 'Select Beer Category' }}</md-select-label>
         <md-option ng-value="category" ng-repeat="category in categories">{{category.cat_name}}</md-option>
     </md-select>
 
-    <md-select ng-model="style" md-on-open="loadStyles()" ng-change="changeStyle()" style="min-width: 200px;">
+    <md-select ng-model="style" md-on-open="loadStyles()" ng-change="changeStyle()">
         <md-select-label>{{ style ? style.style_name : 'Select Beer Style' }}</md-select-label>
         <md-option ng-value="style" ng-repeat="style in styles">{{style.style_name}}</md-option>
     </md-select>
@@ -14,9 +14,9 @@
 
 <div flex class="grid">
 
-    <md-grid-list md-cols="5" md-gutter="1em" md-row-height="4:3">
+    <md-grid-list md-cols="4" md-gutter="1em" md-row-height="4:3">
         <md-grid-tile ng-repeat="beer in beers">
-            <img src="{{beer.image}}"></md-icon>
+            <img src="img/beer/{{beer.id}}.jpg"></md-icon>
             <md-grid-tile-footer ui-sref="send({ beerId: beer.id })">
                 <h3>{{beer.name}}</h3>
             </md-grid-tile-footer>

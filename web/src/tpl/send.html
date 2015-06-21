@@ -1,8 +1,10 @@
-<div class="send" layout="row">
-    <div>
+<div class="send" layout="row" layout-margin layout-fill layout-padding>
+    <div flex>
+        <img src="img/beer/{{beer.id}}.jpg"/>
         <h1>{{beer.name}}</h1>
+        <p>{{beer.descript}}</p>
     </div>
-    <div>
+    <div flex>
         <md-content layout-padding class="autoScroll">
             <md-input-container class="md-icon-float" >
                 <!-- Use floating label instead of placeholder -->
@@ -10,18 +12,20 @@
                 <md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
                 <input ng-model="user.name" type="text">
             </md-input-container>
-            <md-input-container md-no-float>
+            <md-input-container class="md-icon-float" >
+                <label>Phone Number</label>
                 <md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
-                <input ng-model="user.phone" type="text" placeholder="Phone Number">
+                <input ng-model="user.phone" type="text">
             </md-input-container>
             <md-input-container >
                 <!-- Use floating placeholder instead of label -->
                 <md-icon md-svg-src="img/icons/ic_email_24px.svg" class="email"></md-icon>
                 <input ng-model="user.email" type="email" placeholder="Email (required)" ng-required="true">
             </md-input-container>
-            <md-input-container md-no-float>
+            <md-input-container class="md-icon-float" >
+                <label>Address</label>
                 <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
-                <input ng-model="user.address" type="text" placeholder="Address" >
+                <input ng-model="user.address" type="text" >
             </md-input-container>
             <md-button class="md-raised md-warn" ng-click="send()">Next</md-button>
         </md-content>

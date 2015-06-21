@@ -1,0 +1,13 @@
+<div class="send" layout="row" layout-margin layout-fill layout-padding >
+    <div flex>
+        <img src="img/beer/{{beer.id}}.jpg"/>
+        <h1>{{beer.name}}</h1>
+        <p>{{beer.descript}}</p>
+    </div>
+    <div flex ui-view>
+        <form id="checkout">
+            <div id="payment-form"></div>
+            <md-button class="md-raised md-primary" ng-if="ready">Pay</md-button>
+        </form>
+    </div>
+</div>

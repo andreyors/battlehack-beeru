@@ -5,10 +5,10 @@ var categories = require('./routes/categories'),
     beers = require('./routes/beers'),
     payment = require('./routes/payment');
 
-app.use('/payment', beers);
-
 app.use('/categories', categories);
 app.use('/styles', styles);
 app.use('/', beers);
+
+app.use('/payment', payment);
 
 module.exports = app;

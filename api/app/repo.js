@@ -70,16 +70,14 @@ Repo.prototype = {
         return new Promise(function(resolve, reject) {
 
             DB.getConnection().then(function(connection) {
-                connection.query(sql, function(err) {
+                connection.query(sql, function(err, rows) {
                     connection.release();
 
                     if (err) {
                         throw err;
                     }
 
-                    var data = [].splice.call(arguments, 1);
-
-                    resolve.apply(data);
+                    resolve(rows);
                 });
             });
 
