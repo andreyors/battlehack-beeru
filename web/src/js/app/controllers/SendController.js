@@ -6,7 +6,9 @@
 
         var SendController = function($scope, $state, beers, storage) {
 
-            $scope.beer = beers.byId($state.params.beerId);
+            beers.byId($state.params.beerId).then(function(beer) {
+                $scope.beer = beer;
+            });
 
             $scope.user = {
                 name: '',
