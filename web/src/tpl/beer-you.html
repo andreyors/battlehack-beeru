@@ -1,0 +1,26 @@
+<div layout="column" layout-align="center center" style="height: 100px;">
+
+    <md-select ng-model="category" md-on-open="loadCategories()" ng-change="changeCategory()" style="min-width: 200px;">
+        <md-select-label>{{ category ? category.cat_name : 'Select Beer Category' }}</md-select-label>
+        <md-option ng-value="category" ng-repeat="category in categories">{{category.cat_name}}</md-option>
+    </md-select>
+
+    <md-select ng-model="style" md-on-open="loadStyles()" ng-change="changeStyle()" style="min-width: 200px;">
+        <md-select-label>{{ style ? style.style_name : 'Select Beer Style' }}</md-select-label>
+        <md-option ng-value="style" ng-repeat="style in styles">{{style.style_name}}</md-option>
+    </md-select>
+
+</div>
+
+<div flex class="grid">
+
+    <md-grid-list md-cols="5" md-gutter="1em" md-row-height="4:3">
+        <md-grid-tile ng-repeat="beer in beers">
+            <img src="{{beer.image}}"></md-icon>
+            <md-grid-tile-footer ui-sref="send({ beerId: beer.id })">
+                <h3>{{beer.name}}</h3>
+            </md-grid-tile-footer>
+        </md-grid-tile>
+    </md-grid-list>
+
+</div>

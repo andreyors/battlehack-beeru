@@ -1,3 +1,5 @@
+"strict mode";
+
 var DB = require('./db');
 
 /**
@@ -77,7 +79,7 @@ Repo.prototype = {
 
                     var data = [].splice.call(arguments, 1);
 
-                    resolve(data);
+                    resolve.apply(data);
                 });
             });
 

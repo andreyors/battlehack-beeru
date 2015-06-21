@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Beer U!</title>
+        <link rel="stylesheet" href="js/lib/angular-material/angular-material.min.css">
+        <link rel="stylesheet/less" href="css/styles.less" type="text/css"/>
+        <script src="js/lib/less/dist/less.min.js" type="text/javascript"></script>
+    </head>
+    <body >
+        <div layout="column" layout-fill class="main">
+            <header layout="row">
+                <img src="img/logo.png" alt="Beer U!">
+            </header>
+            <md-divider></md-divider>
+            <section ui-view>
+                <div layout="row" layout-sm="column" layout-align="space-around" class="top50">
+                    <md-progress-circular md-mode="indeterminate" aria-valuemin="0" aria-valuemax="100" role="progressbar" class="md-default-theme" style="-webkit-transform: scale(1);">
+                        <div class="md-spinner-wrapper">
+                            <div class="md-inner">
+                                <div class="md-gap"></div>
+                                <div class="md-left">
+                                    <div class="md-half-circle"></div>
+                                </div>
+                                <div class="md-right">
+                                    <div class="md-half-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-progress-circular>
+                </div>
+            </section>
+        </div>
+        <script src="js/lib/requirejs/require.js" data-main="js/boot"></script>
+    </body>
+</html>

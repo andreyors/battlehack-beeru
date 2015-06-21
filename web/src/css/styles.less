@@ -1,0 +1,48 @@
+header {
+  padding: 15px;
+  img {height: 70px;}
+}
+.top50 {
+  position: relative;
+  top: 50%;
+}
+
+.grid md-grid-list {
+  margin: 8px;
+}
+.grid md-grid-tile {
+  transition: all 300ms ease-out 50ms;
+
+  md-icon {
+    padding-bottom: 32px;
+  }
+
+  md-grid-tile-footer {
+    background: rgba(0, 0, 0, 0.68);
+    height: 36px;
+  }
+}
+
+.grid md-grid-tile-footer figcaption {
+  width: 100%;
+  h3 {
+    margin: 0;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.send .inputIconDemo {
+  min-height: 48px;
+}
+.send md-input-container:not(.md-input-invalid) > md-icon.email {
+  color: green;
+}
+.send md-input-container:not(.md-input-invalid) > md-icon.name {
+  color: dodgerblue;
+}
+.send md-input-container.md-input-invalid > md-icon.email,
+.inputdemoIcons md-input-container.md-input-invalid > md-icon.name {
+  color: red;
+}

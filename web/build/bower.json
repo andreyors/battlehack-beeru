@@ -1,0 +1,24 @@
+{
+  "name": "Beer U!",
+  "version": "0.0.1",
+  "authors": [
+      "Vladimir Maliuchenko",
+      "Andrey Orsoev"
+    ],
+  "description": "Beer U! web application",
+  "main": "index.html",
+  "ignore": [
+    "**/.*",
+    ".node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "latest",
+    "less": "latest",
+    "angular": "latest",
+    "angular-ui-router": "latest",
+    "angular-material": "latest"
+  }
+}
