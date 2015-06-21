@@ -68,7 +68,7 @@ class ActiveTable {
                 break;
         }
 
-        return $result;
+        return implode(', ', $result);
     }
 
     public function __construct($db) {

@@ -31,10 +31,6 @@ class Payment extends ActiveTable {
         return $this->_get($id, 'token', 'id');
     }
 
-    public function getTransactionIdByToken($token) {
-        return $this->_get($token, 'transaction_id', 'token');
-    }
-
     public function getStatusByToken($token) {
         $status_id = $this->_get($token, 'status_id', 'token');
         $status = new Status($this->_db);
@@ -42,18 +38,16 @@ class Payment extends ActiveTable {
         return $status->getTitleById($status_id);
     }
 
-    public function add($customer_id, $items, $nonce = 'fake-valid-nonce') {
-        $this->_db->beginTransaction();
+    public function getTransactionIdByToken($token) {
+        return $this->_get($token, 'transaction_id', 'token');
+    }
 
+    public function add($customer_id, $items, $nonce = 'fake-valid-nonce') {
         $token = $this->getToken();
         $amount = $this->getAmount($items);
 
-        $payment = Braintree_PaymentMethod::create([
-            'customerId' => $customer_id,
-        ]);
-
         $status = new Status($this->_db);
-        $status_id = $status->getIdByAlias('paid');
+        $status_id = $status->getIdByAlias('pending');
 
         $data = array(
             'token' => $token,
@@ -66,7 +60,9 @@ class Payment extends ActiveTable {
                     %s
                 (%s)
                 VALUES
-                (%s)', $this->getTable(), implode(', ', $this->_build('key', $data)), implode(', ', $this->_build('value', $data)));
+                (%s)', $this->getTable(), $this->_build('key', $data), $this->_build('value', $data));
+
+        $this->_db->beginTransaction();
 
         try {
             $this->_db->exec($sql);
@@ -76,23 +72,7 @@ class Payment extends ActiveTable {
         }
 
         $item = new Item($this->_db);
-        $item->addItems($payment_id, $items);
-
-        $result = Braintree_Transaction::sale(array(
-            'amount' => $amount,
-            'customerId' => $customer_id,
-            'paymentMethodNonce' => $nonce,
-            'options' => array(
-                'submitForSettlement' => true
-            )
-        ));
-
-        if ($result->success) {
-            $transaction_id = $result->transaction->id;
-            if ($transaction_id) {
-                $this->update($payment_id, array('transaction_id' => $transaction_id));
-            }
-        }
+        $item->add($payment_id, $items);
 
         $this->_db->commit();
 

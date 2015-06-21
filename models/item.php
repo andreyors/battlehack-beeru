@@ -4,7 +4,7 @@ class Item extends ActiveTable {
     protected $_table = 'items';
     protected $_db = null;
 
-    public function addItems($payment_id, $data) {
+    public function add($payment_id, $data) {
         if (!empty($data)) {
             $header = array(
                 'title' => 'title',
@@ -15,7 +15,7 @@ class Item extends ActiveTable {
                             %s
                         (payment_id, %s)
                         VALUES
-                        (%d, [values])', $this->getTable(), implode(', ', $this->_build('key', $header)), $payment_id);
+                        (%d, [values])', $this->getTable(), $this->_build('key', $header), $payment_id);
 
             foreach($data as $v) {
                 $set = array(
@@ -23,7 +23,7 @@ class Item extends ActiveTable {
                     'price' => $v['price'],
                 );
 
-                $sql = strtr($template, array('[values]' => implode(', ', $this->_build('value', $set))));
+                $sql = strtr($template, array('[values]' => $this->_build('value', $set)));
                 try {
                     $this->_db->exec($sql);
                 } catch(PDOException $e) {

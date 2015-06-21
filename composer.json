@@ -12,6 +12,7 @@
         "slim/views": "0.1.*",
         "twig/twig": "1.*",
         "braintree/braintree_php" : "3.0.1",
-        "twilio/sdk": "^4.2"
+        "twilio/sdk": "^4.2",
+        "giggsey/libphonenumber-for-php": "~7.0"
     }
 }

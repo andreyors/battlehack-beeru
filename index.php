@@ -29,12 +29,10 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
   $rawData = file_get_contents("php://input");
   $json = json_decode($rawData, true);
 
-  $paymentData = !empty($json['payment']) ? $json['payment'] : array();
   $customerData = !empty($json['customer']) ? $json['customer'] : array();
   $itemsData = !empty($json['items']) ? $json['items'] : array();
 
   $token = false;
-
   if (!empty($customerData)) {
     $customer = new Customer($db);
     $customer_id = $customer->getCustomerIdByValues($customerData);
@@ -82,7 +80,6 @@ $app->get('/api/payment', function() {
       die(json_encode($data));
 });
 
-
 $app->post('/api/payment/status', 'API', function() use ($app, $db) {
     $rawData = file_get_contents("php://input");
     $json = json_decode($rawData, true);
@@ -90,6 +87,7 @@ $app->post('/api/payment/status', 'API', function() use ($app, $db) {
     $token = !empty($json['token']) ? substr($json['token'], 0, 40) : false;
 
     $payment = new Payment($db);
+
     $status = $payment->getStatusByToken($token);
     $transaction_id = $payment->getTransactionIdByToken($token);
 
@@ -97,10 +95,9 @@ $app->post('/api/payment/status', 'API', function() use ($app, $db) {
 });
 
 $app->get('/api/payment/status', function() {
-  $data = array(
-    'token' => md5('token')
+    $data = array(
+      'token' => sha1('token')
     );
-
     die(json_encode($data));
 });
 
@@ -109,48 +106,21 @@ $app->get('/api/sms', 'API', function() use ($app) {
   $phone = !empty($_GET['phone']) ? $_GET['phone'] : '';
   $message = !empty($_GET['message']) ? substr($_GET['message'], 0, 140) : '';
 
-  $client = new Services_Twilio(TWILIO_SID, TWILIO_TOKEN);
-  $result = array();
+  $result = SMS($phone, $text);
 
-  try {
-    $twilio = $client->account->messages->create(array(
-        "From" => TWILIO_NUMBER,
-        "To" => $phone,
-        "Body" => $message,
-    ));
-  } catch (Services_Twilio_RestException $e) {
-    echo $e->getMessage();
-  }
-
-  $status = 'sent';
-
-  $app->render(200, ['status' => $status]);
+  $app->render(200, ['result' => $result]);
 });
 
-$app->post('/api/sms/request', 'API', function() use ($app) {
-
-});
-
-$app->post('/api/sms/fallback', 'API', function() use ($app) {
-
-});
-
-$app->post('/api/sms/status', 'API', function() use ($app) {
-
-});
-
-$app->get('/api/short', 'API', function() use ($app) {
+$app->get('/api/url', 'API', function() use ($app) {
   $result = false;
 
   $url = !empty($_GET['url']) ? $_GET['url'] : '';
 
   if (!empty($url)) {
-    $gApi = new GoogleShortener(GOOGLE_API_KEY);
-    $short = $gApi->shorten($url);
 
     $result = array(
       "longUrl" => $url,
-      "url" => $short,
+      "url" => URL($url),
     );
   }
 

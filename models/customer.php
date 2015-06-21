@@ -29,46 +29,22 @@ class Customer extends ActiveTable {
         $phone = !empty($data['phone']) ? $data['phone'] : '';
 
         if (!empty($first_name) && !empty($last_name) && !empty($email) && !empty($phone)) {
-            $result = Braintree_Customer::create([
-                'firstName' => $data['first_name'],
-                'lastName' =>  $data['last_name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-            ]);
-
-            if ($result->success) {
-                $customer_id  = $result->customer->id;
-                $data['customer_id'] = $customer_id;
-            }
-        }
-
-        $sql = sprintf("INSERT INTO
-            %s
-            (%s)
-            VALUES
-            (%s)", $this->getTable(), implode(', ', $this->_build('key', $data)), implode(', ', $this->_build('value', $data)));
-
-        $this->_db->beginTransaction();
-
-        try {
-            $res = $this->_db->exec($sql);
-
-            $id = $this->_db->lastInsertId();
-            $customer_id = $this->getCustomerIdById($id);
-        } catch(PDOException $e) {
-            $this->_db->rollBack();
-        }
-
-        $this->_db->commit();
-
-        return $customer_id;
-    }
-
-    public function update($id, $data) {
-        $sql = sprintf("UPDATE %s
-            SET
+            $sql = sprintf("INSERT INTO
                 %s
-            WHERE
-                id = %d", $this->getTable(), $this->_buildCondition($data, ', '), $id);
+                (%s)
+                VALUES
+                (%s)", $this->getTable(), $this->_build('key', $data), $this->_build('value', $data));
+
+            $this->_db->beginTransaction();
+            try {
+                $res = $this->_db->exec($sql);
+                $id = $this->_db->lastInsertId();
+            } catch(PDOException $e) {
+                $this->_db->rollBack();
+            }
+            $this->_db->commit();
+        }
+
+        return $id;
     }
 }

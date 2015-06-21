@@ -24,3 +24,24 @@ function DB($db_dsn, $db_user, $db_pass) {
 
     return $dbh;
 }
+
+function SMS($phone, $text) {
+  $client = new Services_Twilio(TWILIO_SID, TWILIO_TOKEN);
+
+  try {
+    $twilio = $client->account->messages->create(array(
+        "From" => TWILIO_NUMBER,
+        "To" => $phone,
+        "Body" => $text,
+    ));
+  } catch (Services_Twilio_RestException $e) {
+    echo $e->getMessage();
+  }
+
+  return $twilio ? $twilio->sid : false;
+}
+
+function URL($url) {
+  $gApi = new GoogleShortener(GOOGLE_API_KEY);
+  return $gApi->shorten($url);
+}
