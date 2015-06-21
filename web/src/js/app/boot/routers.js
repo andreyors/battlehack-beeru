@@ -28,6 +28,11 @@
                     url: '/send/:beerId',
                     templateUrl: 'tpl/send.html',
                     controller: 'SendController'
+                })
+                .state('pay', {
+                    url: '/pay',
+                    templateUrl: 'tpl/pay.html',
+                    controller: 'PayController'
                 });
 
         };

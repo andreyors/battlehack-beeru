@@ -6,7 +6,8 @@
         'controllers/MainController',
         'controllers/BeerYouController',
         'controllers/BeerMeController',
-        'controllers/SendController'
+        'controllers/SendController',
+        'controllers/PayController'
     ];
 
     define(dependencies, function() {
@@ -15,7 +16,8 @@
             .controller('MainController', require('controllers/MainController'))
             .controller('BeerYouController', require('controllers/BeerYouController'))
             .controller('BeerMeController', require('controllers/BeerMeController'))
-            .controller('SendController', require('controllers/SendController'));
+            .controller('SendController', require('controllers/SendController'))
+            .controller('PayController', require('controllers/PayController'));
 
     });
 

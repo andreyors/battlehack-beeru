@@ -2,9 +2,9 @@
   "name": "Beer U!",
   "version": "0.0.1",
   "authors": [
-      "Vladimir Maliuchenko",
-      "Andrey Orsoev"
-    ],
+    "Vladimir Maliuchenko",
+    "Andrey Orsoev"
+  ],
   "description": "Beer U! web application",
   "main": "index.html",
   "ignore": [
@@ -19,6 +19,7 @@
     "less": "latest",
     "angular": "latest",
     "angular-ui-router": "latest",
-    "angular-material": "latest"
+    "angular-material": "latest",
+    "braintree-web": "~2.8.0"
   }
 }

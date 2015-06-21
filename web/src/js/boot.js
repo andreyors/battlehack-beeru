@@ -7,6 +7,7 @@
         baseUrl: 'js/app',
         
         paths: {
+            braintree: '/src/js/lib/braintree-web/dist/braintree',
             angular: '/src/js/lib//angular/angular',
             uiRouter: '/src/js/lib/angular-ui-router/release/angular-ui-router',
             ngAnimate: '/src/js/lib/angular-animate/angular-animate',

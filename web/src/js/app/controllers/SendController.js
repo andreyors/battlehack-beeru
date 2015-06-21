@@ -4,9 +4,9 @@
 
     define([], function() {
 
-        var SendController = function($scope, $stateParams, beers) {
+        var SendController = function($scope, $state, beers, storage) {
 
-            $scope.beer = beers.byId($stateParams.beerId);
+            $scope.beer = beers.byId($state.params.beerId);
 
             $scope.user = {
                 name: '',
@@ -16,12 +16,14 @@
             };
 
             $scope.send = function() {
-
+                storage.Session.set('user', $scope.user);
+                storage.Session.set('beer', $scope.beer);
+                $state.go('pay');
             };
 
         };
 
-        return ['$scope', '$stateParams', 'beers', SendController];
+        return ['$scope', '$state', 'beers', 'storage', SendController];
 
     });
 
