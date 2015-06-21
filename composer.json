@@ -1,5 +1,12 @@
 {
+    "config": {
+        "require-all": true
+    },
    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mysql": "*",
         "slim/slim": "2.3.*",
         "dogancelik/slim-json": "0.2.*",
         "slim/views": "0.1.*",

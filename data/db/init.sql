@@ -21,7 +21,8 @@ CREATE TABLE payments (
     token VARCHAR(40) NOT NULL,
     customer_id INT(9) NOT NULL,
     status_id INT(9) NOT NULL,
-    amount DECIMAL(10,2) NOT NULL
+    amount DECIMAL(10,2) NOT NULL,
+    transaction_id VARCHAR(6),
 ) ENGINE=InnoDB;
 
 CREATE TABLE statuses (
@@ -30,13 +31,15 @@ CREATE TABLE statuses (
     is_active TINYINT(1) DEFAULT 0
 ) ENGINE=InnoDB;
 
-INSERT INTO statuses (title, is_active)
+INSERT INTO statuses (alias, title, is_active)
     VALUES
-    ('pending', 1),
-    ('paid', 1),
-    ('rejected', 1),
-    ('cancelled', 1),
-    ('refunded', 1);
+    ('pending', 'pending', 1),
+    ('paid', 'paid', 1),
+    ('rejected', 'rejected', 1),
+    ('cancelled', 'cancelled', 1),
+    ('refunded', 'refunded', 1);
+
+CREATE INDEX status ON statuses(`alias`);
 
 CREATE TABLE items (
     id INT(9) NOT NULL AUTO_INCREMENT PRIMARY KEY,

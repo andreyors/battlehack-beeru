@@ -5,14 +5,15 @@ include 'conf/init.php';
 $app = new \Slim\Slim(array(
     'debug' => true,
     'view' => new \Slim\Views\Twig,
-    'templates.path' => WEBROOT . 'views',
+    'templates.path' => ROOTDIR . 'views',
 ));
 
 $db = DB(DB_DSN, DB_USER, DB_PASS);
+
 $view = $app->view;
 $view->parserOptions = array(
     'debug' => true,
-    'cache' => WEBROOT . 'var/cache',
+    'cache' => CACHEDIR,
 );
 
 $app->get('/', function() use ($app, $db) {
@@ -28,10 +29,11 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
   $rawData = file_get_contents("php://input");
   $json = json_decode($rawData, true);
 
+  $paymentData = !empty($json['payment']) ? $json['payment'] : array();
   $customerData = !empty($json['customer']) ? $json['customer'] : array();
   $itemsData = !empty($json['items']) ? $json['items'] : array();
 
-  $token = md5('token');
+  $token = false;
 
   if (!empty($customerData)) {
     $customer = new Customer($db);
@@ -41,10 +43,14 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
       $customer_id = $customer->create($customerData);
     }
 
-    die(var_dump($customer_id));
-
+    $payment_id = false;
     if ($customer_id) {
-      $token = $customer->getTokenByCustomer($customer_id);
+      $payment = new Payment($db);
+      $payment_id = $payment->add($customer_id, $itemsData);
+    }
+
+    if ($payment_id) {
+      $token = $payment->getTokenById($payment_id);
     }
   }
 
@@ -78,14 +84,13 @@ $app->get('/api/payment', function() {
 
 
 $app->post('/api/payment/status', 'API', function() use ($app, $db) {
-    $token = !empty($_POST['token']) ? subtsr($_POST['token'], 0, 32) : false;
+    $token = !empty($_POST['token']) ? substr($_POST['token'], 0, 40) : false;
 
-    $status = 'paid';
-    if (!empty($token)) {
-        $status = 'rejected';
-    }
+    $payment = new Payment($db);
+    $status = $payment->getStatusByToken($token);
+    $transaction_id = $payment->getTransactionIdByToken($token);
 
-    $app->render(200, ['status' => $status]);
+    $app->render(200, ['status' => $status, 'transaction_id' => $transaction_id]);
 });
 
 $app->get('/api/payment/status', function() {
@@ -113,6 +118,10 @@ $app->get('/api/sms', 'API', function() use ($app) {
   } catch (Services_Twilio_RestException $e) {
     echo $e->getMessage();
   }
+
+  $status = 'sent';
+
+  $app->render(200, ['status' => $status]);
 });
 
 $app->post('/api/sms/request', 'API', function() use ($app) {
@@ -128,6 +137,8 @@ $app->post('/api/sms/status', 'API', function() use ($app) {
 });
 
 $app->get('/api/short', 'API', function() use ($app) {
+  $result = false;
+
   $url = !empty($_GET['url']) ? $_GET['url'] : '';
 
   if (!empty($url)) {
@@ -138,9 +149,9 @@ $app->get('/api/short', 'API', function() use ($app) {
       "longUrl" => $url,
       "url" => $short,
     );
-
-    die(json_encode($result));
   }
+
+  $app->render(200, ['result' => $result]);
 });
 
 $app->run();
