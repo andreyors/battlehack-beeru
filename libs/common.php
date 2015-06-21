@@ -46,7 +46,7 @@ function URL($url) {
   return $gApi->shorten($url);
 }
 
-function MAIL($from, $to, $subject, $text) {
+function QMAIL($from, $to, $subject, $text) {
   $url = 'https://api.sendgrid.com/api/mail.send.json';
 
   $params = array(
@@ -62,22 +62,26 @@ function MAIL($from, $to, $subject, $text) {
   if (!empty($to)) {
     foreach($to as $v) {
       if (preg_match('#(.*)\s+\<(.*)\>+#', $v, $matches)) {
-        var_dump($matches);
+        $toname = $matches[1];
+        $to = $matches[2];
+        $params['to'][] = $to;
+        $params['toname'][] = $toname;
+      } else {
+        $params['to'] = $v;
       }
     }
   }
 
   $postdata = http_build_query($params);
-  $opts = array(
-    'http' =>array(
-      'method'  => 'POST',
-      'header'  => 'Content-type: application/x-www-form-urlencoded',
-      'content' => $postdata
-    )
-  );
 
-  $context  = stream_context_create($opts);
-  $result = file_get_contents($url, false, $context);
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // On dev server only!
+  $result = curl_exec($ch);
 
   return $result;
 }

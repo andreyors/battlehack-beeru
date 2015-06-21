@@ -1,6 +1,10 @@
 <?php
 
 class ActiveTable {
+    public function getIdByValues($data) {
+        return $this->_read($data, 'id');
+    }
+
     public function exists($data) {
         return $this->_read($data, 'COUNT(1) cnt');
     }
@@ -20,10 +24,6 @@ class ActiveTable {
                         (id = %d)", $this->getTable(), $this->_buildCondition($data, ', '), $id);
 
         $this->_db->exec($sql);
-    }
-
-    public function getIdByValues($data) {
-        return $this->_read($data, 'id');
     }
 
     protected function _get($value, $searched_for = 'id', $searched_by = 'id') {

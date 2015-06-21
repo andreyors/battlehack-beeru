@@ -88,10 +88,10 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
   $customerData = !empty($json['customer']) ? $json['customer'] : array();
   $itemsData = !empty($json['items']) ? $json['items'] : array();
 
-  $token = false;
+  $token = null;
   if (!empty($customerData)) {
     $customer = new Customer($db);
-    $customer_id = $customer->getCustomerIdByValues($customerData);
+    $customer_id = $customer->getIdByValues($customerData);
 
     if (!$customer_id) {
       $customer_id = $customer->create($customerData);
@@ -191,8 +191,54 @@ $app->get('/api/url', 'API', function() use ($app) {
   $app->render(200, ['result' => $result]);
 });
 
-$api->post('/api/mail', 'API', function() use ($app, $db) {
-  MAIL()
+$app->get('/api/mail', 'API', function() use ($app, $db) {
+  $to = !empty($_GET['to']) ? $_GET['to'] : '';
+  $subj = !empty($_GET['subj']) ? $_GET['subj'] : '';
+  $from = !empty($_GET['from']) ? $_GET['from'] : '';
+  $text = !empty($_GET['text']) ? $_GET['text'] : '';
+
+  if (!empty($to) && !empty($from)) {
+    QMAIL($from, $to, $subj, $text);
+  }
+});
+
+$app->post('/api/token', 'API', function() use($app, $db) {
+  $rawData = file_get_contents("php://input");
+  $json = json_decode($rawData, true);
+
+  $customer = new Customer($db);
+
+  $data = array(
+      'first_name' => (!empty($json['first_name']) ? $json['first_name'] : ''),
+      'last_name' => (!empty($json['last_name']) ? $json['last_name'] : ''),
+      'email' => (!empty($json['email']) ? $json['email'] : ''),
+      'phone' => (!empty($json['phone']) ? $json['phone'] : ''),
+  );
+
+  $customer_id = $customer->getIdByValues($data);
+
+  if (empty($customer_id)) {
+    $customer_id = $customer->create($data);
+  }
+
+  $paypalCustomerId = $customer->getCustomerIdByValues($data);
+  if (empty($paypalCustomerId)) {
+    $data = array(
+      'firstName' => (!empty($json['first_name']) ? $json['first_name'] : ''),
+      'lastName' => (!empty($json['last_name']) ? $json['last_name'] : ''),
+      'email' => (!empty($json['email']) ? $json['email'] : ''),
+      'phone' => (!empty($json['phone']) ? $json['phone'] : ''),
+    );
+    $paypalCustomerId = $customer->createCustomer($data);
+    $customer->update($customer_id, array('customer_id' => $paypalCustomerId));
+  }
+
+  $token = null;
+  if ($paypalCustomerId) {
+    $token = $customer->getTokenByCustomerId($paypalCustomerId);
+  }
+
+  $app->render(200, ['token' => $token]);
 });
 
 $app->run();
