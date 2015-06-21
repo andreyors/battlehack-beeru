@@ -192,7 +192,14 @@ $app->get('/api/url', 'API', function() use ($app) {
 });
 
 $app->get('/api/mail', 'API', function() use ($app, $db) {
-  QMAIL('mvv.feo@gmail.com', 'andrey.orsoev@gmail.com', 'Subj', 'Body');
+  $to = !empty($_GET['to']) ? $_GET['to'] : '';
+  $subj = !empty($_GET['subj']) ? $_GET['subj'] : '';
+  $from = !empty($_GET['from']) ? $_GET['from'] : '';
+  $text = !empty($_GET['text']) ? $_GET['text'] : '';
+
+  if (!empty($to) && !empty($from)) {
+    QMAIL($from, $to, $subj, $text);
+  }
 });
 
 $app->post('/api/token', 'API', function() use($app, $db) {

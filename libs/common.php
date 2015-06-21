@@ -62,7 +62,12 @@ function QMAIL($from, $to, $subject, $text) {
   if (!empty($to)) {
     foreach($to as $v) {
       if (preg_match('#(.*)\s+\<(.*)\>+#', $v, $matches)) {
-        var_dump($matches);
+        $toname = $matches[1];
+        $to = $matches[2];
+        $params['to'][] = $to;
+        $params['toname'][] = $toname;
+      } else {
+        $params['to'] = $v;
       }
     }
   }
