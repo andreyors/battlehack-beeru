@@ -1,0 +1,31 @@
+{% extends 'layouts/base.twig' %}
+
+{% block header %}
+    <h1>Pay {{ amount }} EURO</h1>
+{% endblock %}
+
+{% block body %}
+    <form id="checkout" method="post" action="/pay/process">
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <div id="payment-form"></div>
+        <input type="submit" value="Pay {{ amount }} EURO " />
+    </form>
+
+    <script type="text/javascript" src="//js.braintreegateway.com/v2/braintree.js"></script>
+    <script type="text/javascript">
+    var clientToken = "{{ client_token }}";
+
+    braintree.setup(
+        clientToken,
+        "dropin",
+        {
+            container: "payment-form"
+        }
+    );
+    </script>
+{% endblock %}
+
+{% block footer %}
+    {% include 'partials/footer.twig' %}
+{% endblock %}

@@ -5,12 +5,20 @@ class ActiveTable {
         return $this->_read($data, 'COUNT(1) cnt');
     }
 
+    public function get($value, $field = 'id', $mask = '*') {
+        $sql = sprintf('SELECT %s FROM %s WHERE (`%s` = ' . ('id' === $field ? '%d' : '"%s"') . ')', $mask, $this->getTable(), $field, $value);
+        $res = $this->_db->query($sql);
+
+        return $res ? $res->fetch() : array();
+    }
+
     public function update($id, $data) {
         $sql = sprintf("UPDATE %s
                         SET
                         %s
                         WHERE
                         (id = %d)", $this->getTable(), $this->_buildCondition($data, ', '), $id);
+
         $this->_db->exec($sql);
     }
 

@@ -26,7 +26,59 @@ $app->get('/', function() use ($app, $db) {
 });
 
 $app->get('/pay/:token', function($token) use ($app, $db) {
-  die(var_dump($token));
+  $payment = new Payment($db);
+  $paymentData = $payment->getByToken($token);
+
+  $customer_id = intval($paymentData['customer_id']);
+
+  $customer = new Customer($db);
+  $customerData = $customer->get($customer_id);
+
+  $paypalCustomerId = $customer->getCustomerIdById($customer_id);
+
+  if (empty($paypalCustomerId)) {
+    $data = array(
+      'firstName' => $customerData['first_name'],
+      'lastName' => $customerData['last_name'],
+      'email' => $customerData['email'],
+      'phone' => $customerData['phone'],
+    );
+
+    $paypalCustomerId = $customer->createCustomer($data);
+    $customer->update($customer_id, array('customer_id' => $paypalCustomerId));
+  }
+
+  $clientToken = false;
+  if (!empty($paypalCustomerId)) {
+    $clientToken = $customer->getTokenByCustomerId($paypalCustomerId);
+  }
+
+  $app->render('index/pay.twig', ['amount' => $paymentData['amount'], 'client_token' => $clientToken, 'token' => $token]);
+});
+
+$app->post('/pay/process', function() use ($app, $db) {
+  $token = !empty($_POST['token']) ? $_POST['token'] : '';
+  $amount = !empty($_POST['amount']) ? $_POST['amount'] : '';
+  $nonce = !empty($_POST['payment_method_nonce']) ? $_POST['payment_method_nonce'] : '';
+
+  $res = false;
+  if (!empty($nonce) && !empty($amount)) {
+    $payment = new Payment($db);
+    $payment_id = $payment->getIdByToken($token);
+
+    $res = $payment->createPayment($payment_id, $nonce, $amount);
+  }
+
+  if ($res) {
+    header('Location: /paid', true, 302);
+    die();
+  } else {
+    die(var_dump($res));
+  }
+});
+
+$app->get('/paid', function() use($app, $db) {
+  $app->render('index/paid.twig');
 });
 
 $app->post('/api/payment', 'API', function() use ($app, $db) {
@@ -45,9 +97,12 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
       $customer_id = $customer->create($customerData);
     }
 
+    $amount = 0;
     $payment_id = false;
     if ($customer_id) {
       $payment = new Payment($db);
+
+      $amount = $payment->getAmount($itemsData);
       $payment_id = $payment->add($customer_id, $itemsData);
     }
 
@@ -57,7 +112,7 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
 
     if ($token && !empty($customerData['phone']) && isValidPhone($customerData['phone'])) {
       $url = 'http://' . $_SERVER['HTTP_HOST'] . '/pay/' . $token;
-      SMS($customerData['phone'], "Request to pay - " . URL($url));
+      SMS($customerData['phone'], "Pay " . (!empty($amount) ? $amount . " EUR" : '') . " by " . URL($url));
     }
   }
 
@@ -134,6 +189,10 @@ $app->get('/api/url', 'API', function() use ($app) {
   }
 
   $app->render(200, ['result' => $result]);
+});
+
+$api->post('/api/mail', 'API', function() use ($app, $db) {
+  MAIL()
 });
 
 $app->run();
