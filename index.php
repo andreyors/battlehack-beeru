@@ -84,7 +84,10 @@ $app->get('/api/payment', function() {
 
 
 $app->post('/api/payment/status', 'API', function() use ($app, $db) {
-    $token = !empty($_POST['token']) ? substr($_POST['token'], 0, 40) : false;
+    $rawData = file_get_contents("php://input");
+    $json = json_decode($rawData, true);
+
+    $token = !empty($json['token']) ? substr($json['token'], 0, 40) : false;
 
     $payment = new Payment($db);
     $status = $payment->getStatusByToken($token);
