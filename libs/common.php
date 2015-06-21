@@ -45,3 +45,13 @@ function URL($url) {
   $gApi = new GoogleShortener(GOOGLE_API_KEY);
   return $gApi->shorten($url);
 }
+
+function isValidPhone($phone) {
+  $phoneUtil = libphonenumber\PhoneNumberUtil::getInstance();
+  try {
+    $numberProto = $phoneUtil->parse($phone, "DE");
+  } catch (\libphonenumber\NumberParseException $e) {
+      echo $e->getMessage();
+  }
+  return $numberProto;
+}

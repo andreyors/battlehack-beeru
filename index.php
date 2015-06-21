@@ -5,7 +5,7 @@ include 'conf/init.php';
 $app = new \Slim\Slim(array(
     'debug' => true,
     'view' => new \Slim\Views\Twig,
-    'templates.path' => ROOTDIR . 'views',
+    'templates.path' => VIEWSDIR,
 ));
 
 $db = DB(DB_DSN, DB_USER, DB_PASS);
@@ -23,6 +23,10 @@ $app->get('/', function() use ($app, $db) {
   $cnt = $res ? $res->fetchColumn() : 0;
 
   $app->render('index/index.twig');
+});
+
+$app->get('/pay/:token', function($token) use ($app, $db) {
+  die(var_dump($token));
 });
 
 $app->post('/api/payment', 'API', function() use ($app, $db) {
@@ -49,6 +53,11 @@ $app->post('/api/payment', 'API', function() use ($app, $db) {
 
     if ($payment_id) {
       $token = $payment->getTokenById($payment_id);
+    }
+
+    if ($token && !empty($customerData['phone']) && isValidPhone($customerData['phone'])) {
+      $url = 'http://' . $_SERVER['HTTP_HOST'] . '/pay/' . $token;
+      SMS($customerData['phone'], "Request to pay - " . URL($url));
     }
   }
 

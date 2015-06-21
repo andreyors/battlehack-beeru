@@ -1,13 +1,13 @@
 <?php
 
 class GoogleShortener {
-	
+
 	// Constructor
 	function __construct($key, $apiURL = 'https://www.googleapis.com/urlshortener/v1/url') {
 		// Keep the API Url
 		$this->apiURL = $apiURL.'?key='.$key;
 	}
-	
+
 	// Shorten a URL
 	function shorten($url) {
 		// Send information along
@@ -15,7 +15,7 @@ class GoogleShortener {
 		// Return the result
 		return isset($response['id']) ? $response['id'] : false;
 	}
-	
+
 	// Expand a URL
 	function expand($url) {
 		// Send information along
@@ -23,7 +23,7 @@ class GoogleShortener {
 		// Return the result
 		return isset($response['longUrl']) ? $response['longUrl'] : false;
 	}
-	
+
 	// Send information to Google
 	function send($url,$shorten = true) {
 		// Create cURL
@@ -45,5 +45,5 @@ class GoogleShortener {
 		curl_close($ch);
 		// Return the result
 		return json_decode($result,true);
-	}		
+	}
 }
