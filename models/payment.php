@@ -19,6 +19,10 @@ class Payment extends ActiveTable {
         return $result;
     }
 
+    public function getByToken($token) {
+        return $this->get($token, 'token');
+    }
+
     public function getToken() {
         if (is_null($this->_token)) {
             $this->_token = sha1(uniqid('payment', true));
@@ -29,6 +33,10 @@ class Payment extends ActiveTable {
 
     public function getTokenById($id) {
         return $this->_get($id, 'token', 'id');
+    }
+
+    public function getIdByToken($token) {
+        return $this->_get($token, 'id', 'token');
     }
 
     public function getStatusByToken($token) {
@@ -77,5 +85,30 @@ class Payment extends ActiveTable {
         $this->_db->commit();
 
         return $payment_id;
+    }
+
+    public function createPayment($payment_id, $nonce, $amount) {
+        $result = false;
+
+        $res = Braintree_Transaction::sale(array(
+            'amount' => $amount,
+            'paymentMethodNonce' => $nonce,
+        ));
+
+        if ($res->success) {
+            $transaction_id = $res->transaction->id;
+            $status = new Status($this->_db);
+
+            $paidStatus = $status->getIdByAlias('paid');
+            $data = array(
+                'status_id' => $paidStatus,
+                'transaction_id' => $transaction_id,
+            );
+
+            $this->update($payment_id, $data);
+            $result = true;
+        }
+
+        return $result;
     }
 }

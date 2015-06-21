@@ -9,15 +9,20 @@ class Customer extends ActiveTable {
     }
 
     public function getCustomerIdById($id) {
-        return $this->_get($id, 'customer_id');
+        return $this->_get($id, 'customer_id', 'id');
     }
 
-    public function getTokenByCustomer($customer_id) {
+    public function getTokenByCustomerId($customer_id) {
         $token =  Braintree_ClientToken::generate([
             "customerId" => $customer_id,
         ]);
 
         return $token;
+    }
+
+    public function createCustomer($data) {
+        $res = Braintree_Customer::create($data);
+        return $res->success ? $res->customer->id : false;
     }
 
     public function create($data) {
