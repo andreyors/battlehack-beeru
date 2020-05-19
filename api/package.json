@@ -11,6 +11,6 @@
   "dependencies": {
     "express": "~4.12.4",
     "debug": "~2.2.0",
-    "mysql": "~2.7.0"
+    "mysql": "~2.18.1"
   }
 }
